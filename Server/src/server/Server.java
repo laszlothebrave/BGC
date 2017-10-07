@@ -60,7 +60,7 @@ public class Server {
                 case "quit":
                     break;
                 default:
-                    System.out.println("Unknow command");
+                    System.out.println("Unknown command");
                     break;
             }
         } while (!command.equals("quit"));
