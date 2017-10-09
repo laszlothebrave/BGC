@@ -5,25 +5,32 @@ import java.io.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Server {
-    private static LinkedBlockingQueue linkedBlockingQueue;
-    private static UserList userList;
-    private static RoomList roomList;
-    private static ServerListener serverListener;
-    private static MessageProcessorForServer messageProcessorForServer;
+    static int port;
+    static boolean isRunning;
+    static LinkedBlockingQueue linkedBlockingQueue;
+    static UserList userList;
+    static RoomList roomList;
     private static BufferedReader keyboardIn;
     private static String command;
-    private static int port;
+    private static ServerListener serverListener;
+    private static MessageProcessorForServer messageProcessorForServer;
 
     public static void main(String[] args) {
-        keyboardIn = new BufferedReader(new InputStreamReader(System.in));
-        command = "null";
+       initializeVariables();
+       startConsole();
+       stop();
+    }
+
+    public static void initializeVariables() {
         port = 13579;
+        isRunning = false;
         linkedBlockingQueue = new LinkedBlockingQueue();
         userList = new UserList();
         roomList = new RoomList();
-        serverListener = new ServerListener(linkedBlockingQueue, userList, port);
-        messageProcessorForServer = new MessageProcessorForServer(linkedBlockingQueue, userList, roomList);
-        startConsole();
+        serverListener = new ServerListener();
+        messageProcessorForServer = new MessageProcessorForServer();
+        keyboardIn = new BufferedReader(new InputStreamReader(System.in));
+        command = "null";
     }
 
     static private void startConsole() {
@@ -32,98 +39,80 @@ public class Server {
         do {
             try {
                 command = keyboardIn.readLine();
+                switch (command) {
+                    case "start":
+                        start();
+                        break;
+                    case "stop":
+                        stop();
+                        break;
+                    case "restart":
+                        restart();
+                        break;
+                    case "help":
+                        help();
+                        break;
+                    case "status":
+                        status();
+                        break;
+                    case "port":
+                        port();
+                        break;
+                    case "quit":
+                        break;
+                    default:
+                        System.out.println("Unknown command");
+                        break;
+                }
             } catch (IOException e) {
-                System.out.println("Can't read from keyboard");;
-            }
-            switch (command) {
-                case "start":
-                    start();
-                    break;
-                case "stop":
-                    stop();
-                    break;
-                case "restart":
-                    restart();
-                    break;
-                case "reset":
-                    reset();
-                    break;
-                case "help":
-                    help();
-                    break;
-                case "status":
-                    status();
-                    break;
-                case "port":
-                    port();
-                    break;
-                case "quit":
-                    break;
-                default:
-                    System.out.println("Unknown command");
-                    break;
+                System.out.println("Can't read from keyboard");
+                break;
             }
         } while (!command.equals("quit"));
-        stop();
     }
 
     private static void start() {
-        new Thread(serverListener).start();
-        new Thread(messageProcessorForServer).start();
+        if (!isRunning) {
+            isRunning = true;
+            new Thread(serverListener).start();
+            new Thread(messageProcessorForServer).start();
+        }
     }
 
     private static void stop() {
+            isRunning = false;
             serverListener.stop();
             messageProcessorForServer.stop();
+            userList.removeAll();
+            roomList.removeAll();
     }
 
     private static void restart() {
-            stop();
-            System.out.println("Restart in progres");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            start();
-    }
-
-    private static void reset() {
+        stop();
         linkedBlockingQueue = new LinkedBlockingQueue();
         userList = new UserList();
         roomList = new RoomList();
-        serverListener = new ServerListener(linkedBlockingQueue, userList, port);
-        messageProcessorForServer = new MessageProcessorForServer(linkedBlockingQueue, userList, roomList);
-    }
-
-    private static void help() {
-        System.out.println("Enter start to start server");
-        System.out.println("Enter stop to stop server");
-        System.out.println("Enter restart to restart");
-        System.out.println("Enter reset to applay changes like new port number");
-        System.out.println("Enter status to see status");
-        System.out.println("Enter port to change port number");
-        System.out.println("Enter quit to quit");
+        serverListener = new ServerListener();
+        messageProcessorForServer = new MessageProcessorForServer();
+        start();
     }
 
     private static void status() {
-            if (serverListener.getIsRunning()) {
-                System.out.println("Listener is running");
-                System.out.println("Listening on port:   " + serverListener.getPort());
+            if (isRunning) {
+                System.out.println("Listening on port:   " + port);
                 System.out.println("Users currently:   " + userList.getCurrentUser());
                 System.out.println("Users since last restart:    " + userList.getUserCounter());
-            } else System.out.println("Listener is not running");
-            if (!messageProcessorForServer.isRunning()) {
-                System.out.println("MessageProcessorForServer is not running");
-            } else {
                 System.out.println("MessageProcessorForServer is running");
-                System.out.println("Number of messages since last restart:   " + messageProcessorForServer.getNumberOfMessages());
-            }
+                System.out.println("Number of messages since last restart:   " + messageProcessorForServer.numberOfMessages);
+            } else {
+                System.out.println("Listener is not running");
+                System.out.println("Message processor is not running");
+             }
     }
 
     private static void port() {
         try {
-            System.out.println("Port number is:   " + serverListener.getPort());
+            System.out.println("Port number is:   " + port);
             System.out.println("Enter new port number:");
             try {
                 command = keyboardIn.readLine();
@@ -134,5 +123,14 @@ public class Server {
         } catch (NullPointerException | NumberFormatException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void help() {
+        System.out.println("Enter start to start server");
+        System.out.println("Enter stop to stop server");
+        System.out.println("Enter restart to restart");
+        System.out.println("Enter status to see status");
+        System.out.println("Enter port to change port number");
+        System.out.println("Enter quit to quit");
     }
 }

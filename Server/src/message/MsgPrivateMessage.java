@@ -25,17 +25,7 @@ public class MsgPrivateMessage implements Message, Serializable {
     }
 
     @Override
-    public void execute(UserList userList, RoomList roomList) {
-
-    }
-
-    @Override
-    public void execute(Game game) {
-
-    }
-
-    @Override
-    public void execute(Engine engine) {
+    public void execute() {
 
     }
 }

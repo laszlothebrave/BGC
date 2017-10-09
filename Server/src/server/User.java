@@ -2,35 +2,35 @@ package server;
 
 import Exeptions.FullServerExeption;
 import message.*;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class User implements Runnable{
-    private Socket socket;
+    private Socket clientSocket;
     private LinkedBlockingQueue linkedBlockingQueue;
-    private UserList userList;
     private UserName userName;
     private ObjectOutputStream outOis;
     private ObjectInputStream inOis;
 
-    User(Socket socket, LinkedBlockingQueue linkedBlockingQueue, UserList userList) {
-        this.socket = socket;
+    User(Socket clientSocket, LinkedBlockingQueue linkedBlockingQueue) {
         this.linkedBlockingQueue = linkedBlockingQueue;
-        this.userList = userList;
-        userName = new UserName(Integer.toString(userList.getAndIncreaseUserCounter()));
+        this.clientSocket = clientSocket;
+        userName = new UserName(Integer.toString(Server.userList.getAndIncreaseUserCounter()));
     }
+
     private void createStreams() throws IOException {
-        outOis = new ObjectOutputStream(socket.getOutputStream());
-        inOis = new ObjectInputStream(socket.getInputStream());
+        outOis = new ObjectOutputStream(clientSocket.getOutputStream());
+        inOis = new ObjectInputStream(clientSocket.getInputStream());
     }
 
     private void addToServer() throws IOException, FullServerExeption {
-        if (userList.getCurrentUser() >= userList.getMaxUsers()) {
+        if (Server.userList.getCurrentUser() >= Server.userList.getMaxUsers()) {
             outOis.writeObject(new MsgServerAnnouncement("Can't connect. server full."));
             throw new FullServerExeption();
         }
-        userList.add(userName, this);
+        Server.userList.add(userName, this);
     }
 
     private void listen() throws IOException, ClassNotFoundException, InterruptedException{
@@ -47,17 +47,17 @@ public class User implements Runnable{
             addToServer();
             listen();
         } catch (InterruptedException | IOException | ClassNotFoundException | FullServerExeption e) {
-            System.out.println("User disconected, check Exeptions");
+            System.out.println("User:   " + userName.getUserName() + "   disconnected");
         }
-        closeSocket();
+        disconnect();
     }
 
-    void closeSocket() {
+    void disconnect() {
         try {
-            socket.close();
+            clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        userList.remove(userName);
+        Server.userList.remove(userName);
     }
 }

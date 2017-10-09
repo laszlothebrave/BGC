@@ -1,10 +1,9 @@
 package server;
 
 import message.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class UserList {
+class UserList {
     private HashMap<UserName, User> usersList;
     private int userCounter;
     private int maxUsers;
@@ -15,10 +14,10 @@ public class UserList {
         usersList = new HashMap<>();
     }
 
-    void closeAll() {
+    void removeAll() {
         for(Map.Entry<UserName, User> entry : usersList.entrySet()) {
+            entry.getValue().disconnect();
             remove(entry.getKey());
-            entry.getValue().closeSocket();
         }
     }
 

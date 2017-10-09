@@ -1,8 +1,5 @@
 package message;
 
-import game.Engine;
-import game.Game;
-import server.*;
 import java.io.Serializable;
 
 public class MsgServerAnnouncement implements  Serializable, Message {
@@ -19,17 +16,7 @@ public class MsgServerAnnouncement implements  Serializable, Message {
     }
 
     @Override
-    public void execute(UserList userList, RoomList roomList) {
-
-    }
-
-    @Override
-    public void execute(Game game) {
-
-    }
-
-    @Override
-    public void execute(Engine engine) {
-
+    public void execute() {
+        System.out.println("MsgServerAnnouncement:  " + info);
     }
 }

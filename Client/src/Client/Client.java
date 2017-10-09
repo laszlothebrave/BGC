@@ -1,148 +1,136 @@
 package Client;
 
-import game.*;
 import message.*;
 import java.io.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client{
-    static private int port;
-    static private LinkedBlockingQueue linkedBlockingQueue;
-    static private ClientListener clientListener;
-    static private MessageProcessorForClient messageProcessorForClient;
-    static private Game game;
-    static private BufferedReader keyboardIn;
-    static private String command;
-    private static UserName userName;
+    public static UserName userName;
+    static int port;
+    static boolean isRunning;
+    static LinkedBlockingQueue linkedBlockingQueue;
+    private static ClientListener clientListener;
+    private static MessageProcessorForClient messageProcessorForClient;
+    private static BufferedReader keyboardIn;
+    private static String command;
 
     public static void main (String[] args) throws InterruptedException {
+        initializeVariables();
+        console();
+        stop();
+    }
+
+    private static void initializeVariables() {
+        userName = new UserName("default username");
         port = 13579;
-        reset();
+        isRunning = false;
+        linkedBlockingQueue = new LinkedBlockingQueue();
+        clientListener = new ClientListener();
+        messageProcessorForClient = new MessageProcessorForClient();
         keyboardIn = new BufferedReader(new InputStreamReader(System.in));
         command = "null";
-        userName = new UserName("default");
-        console();
     }
 
     private static void console() {
         System.out.println("Client started");
         System.out.println("Enter help for help");
-        while ( !command.equals("quit") ) {
+        do {
             try {
                 command = keyboardIn.readLine();
+                switch (command) {
+                    case "start":
+                        start();
+                        break;
+                    case "stop":
+                        stop();
+                        break;
+                    case "restart":
+                        restart();
+                        break;
+                    case "status":
+                        status();
+                        break;
+                    case "port":
+                        port();
+                        break;
+                    case "in":
+                        logIn();
+                        break;
+                    case "out":
+                        logOut();
+                        break;
+                    case "msg":
+                        privateMessage();
+                        break;
+                    case "quit":
+                        break;
+                    case "help":
+                        help();
+                        break;
+                    default:
+                        System.out.println("Unknow command");
+                        break;
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Can't read from keyboard");
+                break;
             }
-            switch (command) {
-                case "start":
-                    start();
-                    break;
-                case "stop":
-                    stop();
-                    break;
-                case "restart":
-                    restart();
-                    break;
-                case "reset":
-                    reset();
-                    break;
-                case "status":
-                    status();
-                    break;
-                case "help":
-                    help();
-                    break;
-                case "port":
-                    port();
-                    break;
-                case "username":
-                    userName();
-                    break;
-                case "private message":
-                    privateMessage();
-                    break;
-                case "quit":
-                    break;
-                default:
-                    System.out.println("Unknow command");
-                    break;
-            }
-        }
+        } while ( !command.equals("quit") ) ;
     }
 
     private static void start() {
-        new Thread(clientListener).start();
-        new Thread(messageProcessorForClient).start();
-
+        if (!isRunning) {
+            new Thread(clientListener).start();
+            new Thread(messageProcessorForClient).start();
+            isRunning = true;
+        }
     }
 
     private static void stop() {
-        try {
-            clientListener.stop();
-            messageProcessorForClient.stop();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
+        isRunning = false;
+        clientListener.stop();
+        messageProcessorForClient.stop();
     }
 
     private static void restart() {
         stop();
-        System.out.println("Restart in progres");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        clientListener = new ClientListener();
+        messageProcessorForClient = new MessageProcessorForClient();
         start();
     }
 
-    private static void reset() {
-        game = new Game();
-        linkedBlockingQueue = new LinkedBlockingQueue();
-        messageProcessorForClient = new MessageProcessorForClient(linkedBlockingQueue, game);
-        clientListener = new ClientListener(port, linkedBlockingQueue, messageProcessorForClient);
-    }
-
     private static void status() {
-        try {
-            if (clientListener.getIsRunning()) {
+            if (isRunning) {
+                System.out.println("Client is running");
                 System.out.println("Port:   " + port);
-            } else System.out.println("ClientListener is not running");
-            if (!messageProcessorForClient.getIsRunning()) {
-                System.out.println("MessageProcessorForClient is not running");
-            } else {
-                System.out.println("MessageProcessorForClient is running");
-                System.out.println("Number of messages since last restart:   " + messageProcessorForClient.getNumberOfMessages());
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+                System.out.println("Number of messages since last restart:   " + messageProcessorForClient.numberOfMessages);
+            } else System.out.println("Client is not running");
     }
     private static void help() {
         System.out.println("Enter start to start connection");
-        System.out.println("Enter stop to terminate connection");
+        System.out.println("Enter stop to stop connection");
+        System.out.println("Enter restart to restart program");
         System.out.println("Enter status to check status");
-        System.out.println("Enter quit to stop program");
-        System.out.println("Enter username to set userName");
+        System.out.println("Enter port to change port number (must restart after)");
+        System.out.println("Enter in to log in");
+        System.out.println("Enter out to log out");
         System.out.println("Enter msg to send private message");
+        System.out.println("Enter quit to stop program");
+
     }
 
     private static void port() {
         try {
             System.out.println("Port number is:   " + port);
             System.out.println("Enter new port number:");
-            try {
-                command = keyboardIn.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            command = keyboardIn.readLine();
             port = Integer.parseInt(command);
-        } catch (NullPointerException | NumberFormatException e) {
-            e.printStackTrace();
+        } catch (NullPointerException | NumberFormatException | IOException e) {
+            System.out.println("Can't change port number");
         }
     }
 
-    private static void userName() {
+    private static void logIn() {
         System.out.println("Old userName is:   " + userName);
         System.out.println("Enter new userName:");
         try {
@@ -152,6 +140,10 @@ public class Client{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void logOut() {
+
     }
 
     private static void privateMessage() {
@@ -165,4 +157,5 @@ public class Client{
             e.printStackTrace();
         }
     }
+
 }

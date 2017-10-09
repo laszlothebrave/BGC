@@ -1,55 +1,34 @@
 package server;
 
 import message.*;
-import java.util.concurrent.LinkedBlockingQueue;
 
 class MessageProcessorForServer implements Runnable{
-    private LinkedBlockingQueue linkedBlockingQueue;
-    private UserList userList;
-    private RoomList roomList;
-    private  int numberOfMessages;
-    private boolean isRunning;
+    public int numberOfMessages;
 
 
-    MessageProcessorForServer(LinkedBlockingQueue linkedBlockingQueue, UserList userList, RoomList roomList) {
-        this.linkedBlockingQueue = linkedBlockingQueue;
-        this.userList = userList;
-        this.roomList = roomList;
+    MessageProcessorForServer() {
         numberOfMessages = 0;
-        isRunning = false;
     }
 
     public void run() {
-        isRunning = true;
-        System.out.println("MessageProcessorForServer started");
-        while (isRunning){
+        System.out.println("Message processor started");
+        while (Server.isRunning){
             try {
-                Message message = (Message) linkedBlockingQueue.take();
+                Message message = (Message) Server.linkedBlockingQueue.take();
                 numberOfMessages++;
-                message.execute(userList, roomList);
+                message.execute();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Message processor crashed. Check for Error");
             }
         }
     }
 
     void stop() {
-        System.out.println("MessageProcessorForServer stoped");
-        isRunning = false;
         try {
-            linkedBlockingQueue.put(new MsgServerAnnouncement("MessageProcessorForServer stoped"));
+            Server.linkedBlockingQueue.put(new MsgServerAnnouncement("Message Processor stoped correctly"));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        roomList.deleteAll();
-        userList.closeAll();
     }
 
-    int getNumberOfMessages() {
-        return numberOfMessages;
-    }
-
-    boolean isRunning() {
-        return isRunning;
-    }
 }

@@ -1,52 +1,34 @@
 package Client;
 
-import game.*;
 import message.*;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 public class MessageProcessorForClient implements Runnable{
-    private LinkedBlockingQueue linkedBlockingQueue;
-    private Game game;
-    private int numberOfMessages;
-    private boolean isRunning;
+    int numberOfMessages;
 
-    public MessageProcessorForClient(LinkedBlockingQueue linkedBlockingQueue, Game game) {
-        this.linkedBlockingQueue = linkedBlockingQueue;
-        this.game = game;
+    MessageProcessorForClient() {
         numberOfMessages = 0;
-        isRunning = false;
     }
 
     public void run() {
-        isRunning = true;
-        System.out.println("MessageProcessorForServer started");
-        while (isRunning){
+        while (Client.isRunning){
             try {
-                Message message = (Message) linkedBlockingQueue.take();
+                Message message = (Message) Client.linkedBlockingQueue.take();
                 numberOfMessages++;
-                message.execute(game);
+                message.execute();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Message processor crashed. Check for Error.");
             }
         }
     }
 
     void stop() {
-        System.out.println("MessageProcessorForServer stoped");
-        isRunning = false;
         try {
-            linkedBlockingQueue.put(new MsgServerAnnouncement("MessageProcessorForServer stoped"));
+            Client.linkedBlockingQueue.put(new MsgServerAnnouncement("Message Processor stoped correctly"));
+            Thread.sleep(500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Message processor crashed. Check for Error.");
         }
+        Client.linkedBlockingQueue.clear();
     }
 
-    int getNumberOfMessages() {
-        return numberOfMessages;
-    }
-
-    boolean getIsRunning() {
-        return isRunning;
-    }
 }
