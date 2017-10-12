@@ -15,10 +15,10 @@ public class ClientListener implements Runnable{
     @Override
     public void run() {
         try {
-            System.setProperty("javax.net.ssl.trustStore", "C:/Program Files/Java/jdk1.8.0_144/bin/truststore3");
+            System.setProperty("javax.net.ssl.trustStore", "C:/Users/Zin/Desktop/pro/java/BGC/lib/truststore3");
             System.setProperty("javax.net.ssl.trustStorePassword", "password");
             SocketFactory ssf = SSLSocketFactory.getDefault();
-            socket = (SSLSocket) ssf.createSocket("localhost", 13579);
+            socket = (SSLSocket) ssf.createSocket("2a02:a31a:e03f:8280:9582:5f58:bdd1:bd87", 13579);
             //printSessionInfo(socket);
             outOis = new ObjectOutputStream(socket.getOutputStream());
             inOis = new ObjectInputStream(socket.getInputStream());
@@ -57,6 +57,7 @@ public class ClientListener implements Runnable{
         for (Certificate aCchain : cchain) {
             System.out.println(((X509Certificate) aCchain).getSubjectDN());
         }
+
         System.out.println("Peer host is " + session.getPeerHost());
         System.out.println("Cipher is " + session.getCipherSuite());
         System.out.println("Protocol is " + session.getProtocol());
@@ -64,5 +65,4 @@ public class ClientListener implements Runnable{
         System.out.println("Session created in " + session.getCreationTime());
         System.out.println("Session accessed in " + session.getLastAccessedTime());
     }
-
 }

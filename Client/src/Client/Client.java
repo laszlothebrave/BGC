@@ -74,6 +74,9 @@ public class Client{
                     case "newUser":
                         newUser();
                         break;
+                    case "info":
+                        info();
+                        break;
                     default:
                         System.out.println("Unknow command");
                         break;
@@ -113,6 +116,7 @@ public class Client{
                 System.out.println("Number of messages since last restart:   " + messageProcessorForClient.numberOfMessages);
             } else System.out.println("Client is not running");
     }
+
     private static void help() {
         System.out.println("Enter start to start connection");
         System.out.println("Enter stop to stop connection");
@@ -123,7 +127,6 @@ public class Client{
         System.out.println("Enter out to log out");
         System.out.println("Enter msg to send private message");
         System.out.println("Enter quit to stop program");
-
     }
 
     private static void port() {
@@ -180,5 +183,9 @@ public class Client{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void info(){
+        send(new MsgAnnouncement("info1234"));
     }
 }

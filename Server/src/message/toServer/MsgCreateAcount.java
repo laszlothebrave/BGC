@@ -4,9 +4,10 @@ import Database.MysqlConnector;
 import Database.UserExceptions.IncorrectEmailAdressException;
 import message.Message;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 
-public class MsgCreateAcount implements Message {
+public class MsgCreateAcount implements Message, Serializable {
     String login;
     String passwordHash;
     String email;
