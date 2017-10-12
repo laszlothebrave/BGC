@@ -1,6 +1,7 @@
 package Client;
 
 import message.*;
+import message.toServer.MsgCreateAcount;
 import message.toServer.MsgDataRequest;
 import message.toServer.MsgPassword;
 
@@ -69,6 +70,9 @@ public class Client{
                         break;
                     case "help":
                         help();
+                        break;
+                    case "newUser":
+                        newUser();
                         break;
                     default:
                         System.out.println("Unknow command");
@@ -167,5 +171,14 @@ public class Client{
 
     public static UserName getUserName() {
         return userName;
+    }
+
+    public static void newUser(){
+        try {
+            System.out.println("podaj login,haslo,email");
+            send(new MsgCreateAcount(keyboardIn.readLine(),keyboardIn.readLine(),keyboardIn.readLine()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
