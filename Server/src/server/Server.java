@@ -8,12 +8,12 @@ public class Server {
     static int port;
     static boolean isRunning;
     static LinkedBlockingQueue linkedBlockingQueue;
-    static UserList userList;
-    static RoomList roomList;
-    private static BufferedReader keyboardIn;
-    private static String command;
+    public static UserList userList;
+    public static RoomList roomList;
     private static ServerListener serverListener;
     private static MessageProcessorForServer messageProcessorForServer;
+    private static BufferedReader keyboardIn;
+    private static String command;
 
     public static void main(String[] args) {
        initializeVariables();
@@ -132,5 +132,13 @@ public class Server {
         System.out.println("Enter status to see status");
         System.out.println("Enter port to change port number");
         System.out.println("Enter quit to quit");
+    }
+
+    public static void send (UserName userName, Message message){
+        try {
+            userList.getUser(userName).send (message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

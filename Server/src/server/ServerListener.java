@@ -67,6 +67,5 @@ public class ServerListener implements Runnable{
         System.out.println(((SSLServerSocket) serverSocket).getNeedClientAuth());
         System.out.println(((SSLServerSocket) serverSocket).getWantClientAuth());
     }
-
 }
 

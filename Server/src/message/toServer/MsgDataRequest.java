@@ -1,4 +1,6 @@
-package message;
+package message.toServer;
+
+import message.Message;
 
 import java.io.Serializable;
 

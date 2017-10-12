@@ -21,6 +21,10 @@ class UserList {
         }
     }
 
+    User getUser (UserName userName) {
+        return usersList.get(userName);
+    }
+
     int getUserCounter() {
         return userCounter;
     }

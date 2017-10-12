@@ -1,14 +1,17 @@
 package Client;
 
 import message.*;
+import message.toServer.MsgDataRequest;
+import message.toServer.MsgPassword;
+
 import java.io.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client{
-    public static UserName userName;
     static int port;
     static boolean isRunning;
     static LinkedBlockingQueue linkedBlockingQueue;
+    static UserName userName;
     private static ClientListener clientListener;
     private static MessageProcessorForClient messageProcessorForClient;
     private static BufferedReader keyboardIn;
@@ -158,4 +161,11 @@ public class Client{
         }
     }
 
+    public static void send(Message message){
+        clientListener.send(message);
+    }
+
+    public static UserName getUserName() {
+        return userName;
+    }
 }

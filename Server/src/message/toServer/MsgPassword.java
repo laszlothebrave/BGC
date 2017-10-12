@@ -1,11 +1,13 @@
-package message;
+package message.toServer;
 
 import game.Engine;
 import game.Game;
+import message.Message;
+import message.UserName;
 import server.*;
 import java.io.Serializable;
 
-public class MsgPassword implements Serializable, Message{
+public class MsgPassword implements Serializable, Message {
     private String password;
     private UserName userName;
 

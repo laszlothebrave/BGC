@@ -25,7 +25,7 @@ class MessageProcessorForServer implements Runnable{
 
     void stop() {
         try {
-            Server.linkedBlockingQueue.put(new MsgServerAnnouncement("Message Processor stoped correctly"));
+            Server.linkedBlockingQueue.put(new MsgAnnouncement("Message Processor stoped correctly"));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

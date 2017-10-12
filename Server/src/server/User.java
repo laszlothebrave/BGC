@@ -27,7 +27,7 @@ public class User implements Runnable{
 
     private void addToServer() throws IOException, FullServerExeption {
         if (Server.userList.getCurrentUser() >= Server.userList.getMaxUsers()) {
-            outOis.writeObject(new MsgServerAnnouncement("Can't connect. server full."));
+            outOis.writeObject(new MsgAnnouncement("Can't connect. server full."));
             throw new FullServerExeption();
         }
         Server.userList.add(userName, this);
@@ -37,7 +37,7 @@ public class User implements Runnable{
         while (true) linkedBlockingQueue.put(inOis.readObject());
     }
 
-    public void send(Message message) throws IOException {
+    void send(Message message) throws IOException {
         outOis.writeObject(message);
     }
 

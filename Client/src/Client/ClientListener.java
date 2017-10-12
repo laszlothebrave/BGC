@@ -37,7 +37,7 @@ public class ClientListener implements Runnable{
         }
     }
 
-    public void send(Message message) {
+    void send(Message message) {
         try {
             outOis.writeObject(message);
         } catch (IOException e) {
@@ -45,7 +45,7 @@ public class ClientListener implements Runnable{
         }
     }
 
-    void printSessionInfo(SSLSocket socket){
+    private void printSessionInfo(SSLSocket socket){
         SSLSession session = socket.getSession();
         Certificate[] cchain = new Certificate[0];
         try {
