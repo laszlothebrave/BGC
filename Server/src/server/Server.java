@@ -1,7 +1,13 @@
 package server;
 
+import Database.AccountManager;
+import Database.Mysql;
 import message.*;
+import org.apache.commons.lang3.RandomUtils;
+
+import javax.xml.bind.DatatypeConverter;
 import java.io.*;
+import java.nio.channels.AcceptPendingException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Server {
@@ -10,6 +16,7 @@ public class Server {
     static LinkedBlockingQueue linkedBlockingQueue;
     public static UserList userList;
     public static RoomList roomList;
+    public static AccountManager accountManager;
     private static ServerListener serverListener;
     private static MessageProcessorForServer messageProcessorForServer;
     private static BufferedReader keyboardIn;
@@ -30,6 +37,7 @@ public class Server {
         serverListener = new ServerListener();
         messageProcessorForServer = new MessageProcessorForServer();
         keyboardIn = new BufferedReader(new InputStreamReader(System.in));
+        accountManager = new AccountManager();
         command = "null";
     }
 
@@ -76,6 +84,7 @@ public class Server {
             isRunning = true;
             new Thread(serverListener).start();
             new Thread(messageProcessorForServer).start();
+            Mysql.connect();
         }
     }
 
@@ -85,6 +94,7 @@ public class Server {
             messageProcessorForServer.stop();
             userList.removeAll();
             roomList.removeAll();
+            Mysql.disconnect();
     }
 
     private static void restart() {

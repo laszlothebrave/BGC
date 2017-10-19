@@ -23,10 +23,6 @@ public class PasswordHash {
         }
     }
 
-    public boolean compare(String passwordHash){
-        return toString().equals(passwordHash);
-    }
-
     @Override
     public String toString() {
         return passwordHash;

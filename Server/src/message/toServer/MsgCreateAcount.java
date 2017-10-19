@@ -1,29 +1,30 @@
 package message.toServer;
 
-import Database.MysqlConnector;
-import Database.UserExceptions.IncorrectEmailAdressException;
+import Database.AccountManager;
+import Database.PasswordHash;
+import Database.UserExceptions.CreateUserExcaptions.CreateUserException;
 import message.Message;
+import server.Server;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 
 public class MsgCreateAcount implements Message, Serializable {
-    String login;
-    String passwordHash;
-    String email;
 
-    public MsgCreateAcount(String login, String passwordHash, String email) {
+    private String login;
+    private String passwordHash;
+    private String email;
+
+    public MsgCreateAcount(String login, String password, String email) {
         this.login = login;
-        this.passwordHash = passwordHash;
+        this.passwordHash = new PasswordHash(password).toString();
         this.email = email;
     }
 
     @Override
     public void execute() {
-        MysqlConnector mysql = new MysqlConnector("37.233.99.37", "3306", "board_games_console", "root", "root");
         try {
-            mysql.addUser(login,passwordHash,email);
-        } catch (SQLException | IncorrectEmailAdressException e) {
+            Server.accountManager.createAccount(login, passwordHash, email);
+        } catch (CreateUserException e) {
             e.printStackTrace();
         }
     }

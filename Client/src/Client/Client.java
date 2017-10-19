@@ -184,7 +184,6 @@ public class Client{
             e.printStackTrace();
         }
     }
-
     private static void info(){
         send(new MsgAnnouncement("info1234"));
     }
