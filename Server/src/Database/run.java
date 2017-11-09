@@ -9,14 +9,15 @@ class ConfirmationMail {
     private Properties properties = new Properties();
 
     public ConfirmationMail() {
-        System.setProperty("javax.net.ssl.keyStore", "C:\\Users\\Zin\\Desktop\\pro\\java\\BGC\\lib\\server.keystore");
-        System.setProperty("javax.net.ssl.keyStorePassword", "password");
+        System.setProperty("javax.net.ssl.trustStore", "C:/Users/Zin/Desktop/pro/java/BGC/lib/truststore3");
+        System.setProperty("javax.net.ssl.trustStorePassword", "password");
 
         properties.setProperty("mail.smtp.auth","true");
         properties.setProperty("mail.smtp.starttls.enable","true");
         properties.setProperty("mail.smtp.host", "37.233.99.37");
         properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.smtp.port","587");
+        properties.setProperty("mail.transport.protocol","smtp");
         properties.setProperty("mail.smtp.user","root");
         properties.setProperty("mail.smtp.password","elomelo123");
 
