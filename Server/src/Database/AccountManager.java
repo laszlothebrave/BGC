@@ -23,8 +23,16 @@ public class AccountManager {
         }
     }
 
-    public void confirmEmail(String confirmationKey) throws InvalidConfirmationKeyException {
-
+    public void confirmEmail(String login,String confirmationKey) throws InvalidConfirmationKeyException {
+        try {
+            if(Mysql.executeQuery("SELECT * FROM users WHERE login='" + login + "' AND confirmationKey='" + confirmationKey + "'").isBeforeFirst()) {
+                Mysql.executeUpdate("UPDATE users SET confirmed=1 WHERE login='"+login+"'");
+            }else{
+                throw new InvalidConfirmationKeyException();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void login(String login, String passwordHash) throws IncorrectLoginDataException {

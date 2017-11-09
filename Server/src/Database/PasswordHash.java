@@ -24,7 +24,5 @@ public class PasswordHash {
     }
 
     @Override
-    public String toString() {
-        return passwordHash;
-    }
+    public String toString() {return passwordHash;}
 }
