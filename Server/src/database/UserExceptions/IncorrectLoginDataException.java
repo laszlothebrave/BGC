@@ -1,4 +1,4 @@
-package Database.UserExceptions;
+package database.UserExceptions;
 
 public class IncorrectLoginDataException extends Exception{
 

@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

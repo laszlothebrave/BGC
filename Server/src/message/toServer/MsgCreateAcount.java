@@ -1,8 +1,7 @@
 package message.toServer;
 
-import Database.AccountManager;
-import Database.PasswordHash;
-import Database.UserExceptions.CreateUserExcaptions.CreateUserException;
+import database.PasswordHash;
+import database.UserExceptions.CreateUserExcaptions.CreateUserException;
 import message.Message;
 import server.Server;
 

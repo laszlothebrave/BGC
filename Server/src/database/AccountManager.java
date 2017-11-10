@@ -1,7 +1,9 @@
-package Database;
+package database;
 
-import Database.UserExceptions.CreateUserExcaptions.*;
-import Database.UserExceptions.IncorrectLoginDataException;
+import database.UserExceptions.CreateUserExcaptions.*;
+import database.UserExceptions.IncorrectLoginDataException;
+import email.ConfirmationEmail;
+import email.SMTPServer;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -17,6 +19,8 @@ public class AccountManager {
             else {
                 String confirmationKey = DatatypeConverter.printHexBinary(RandomUtils.nextBytes(2));
                 Mysql.executeUpdate("INSERT INTO users (login,password,email,confirmationKey) VALUES ('" + login + "','" + passwordHash + "','" + email + "','"+confirmationKey+"')");
+                ConfirmationEmail confirmationEmail = new ConfirmationEmail(null,confirmationKey,email);
+                SMTPServer.send(confirmationEmail);
             }
         } catch (SQLException e) {
             e.printStackTrace();

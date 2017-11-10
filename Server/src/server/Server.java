@@ -1,13 +1,15 @@
 package server;
 
-import Database.AccountManager;
-import Database.Mysql;
+import database.AccountManager;
+import database.Mysql;
+import database.PasswordHash;
+import database.UserExceptions.CreateUserExcaptions.EmailAdressOccupiedException;
+import database.UserExceptions.CreateUserExcaptions.InvalidEmailAdressException;
+import database.UserExceptions.CreateUserExcaptions.UserExistException;
+import email.SMTPServer;
 import message.*;
-import org.apache.commons.lang3.RandomUtils;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.*;
-import java.nio.channels.AcceptPendingException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Server {
@@ -85,6 +87,7 @@ public class Server {
             new Thread(serverListener).start();
             new Thread(messageProcessorForServer).start();
             Mysql.connect();
+            SMTPServer.connect();
         }
     }
 
@@ -95,6 +98,7 @@ public class Server {
             userList.removeAll();
             roomList.removeAll();
             Mysql.disconnect();
+            SMTPServer.disconnect();
     }
 
     private static void restart() {
@@ -146,7 +150,7 @@ public class Server {
 
     public static void send (UserName userName, Message message){
         try {
-            userList.getUser(userName).send (message);
+            userList.getUser(userName).send(message);
         } catch (IOException e) {
             e.printStackTrace();
         }
