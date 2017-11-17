@@ -51,7 +51,7 @@ public class UserList {
 
     public void print(){
         for(Map.Entry<UserName, User> entry : usersList.entrySet()) {
-            System.out.println(entry.getKey());
+            System.out.println(entry.getKey().getUserName());
         }
     }
 }
