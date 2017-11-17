@@ -3,6 +3,7 @@ package client;
 import message.*;
 import message.toServer.MsgCreateAcount;
 import message.toServer.MsgDataRequest;
+import message.toServer.MsgLogin;
 import message.toServer.MsgPassword;
 
 import java.io.*;
@@ -141,12 +142,9 @@ public class Client{
     }
 
     private static void logIn() {
-        System.out.println("Old userName is:   " + userName);
-        System.out.println("Enter new userName:");
+        System.out.println("Enter username and password:");
         try {
-            UserName userName = new UserName(keyboardIn.readLine());
-            clientListener.send(new MsgPassword(userName, "password"));
-            clientListener.send(new MsgDataRequest());
+           clientListener.send(new MsgLogin(keyboardIn.readLine(),keyboardIn.readLine()));
         } catch (IOException e) {
             e.printStackTrace();
         }

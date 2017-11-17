@@ -18,7 +18,7 @@ public class ClientListener implements Runnable{
             System.setProperty("javax.net.ssl.trustStore", "C:/Users/Zin/Desktop/pro/java/BGC/lib/truststore3");
             System.setProperty("javax.net.ssl.trustStorePassword", "password");
             SocketFactory ssf = SSLSocketFactory.getDefault();
-            socket = (SSLSocket) ssf.createSocket("2a02:a31a:e03f:8280:9582:5f58:bdd1:bd87", 13579);
+            socket = (SSLSocket) ssf.createSocket("2a02:a31a:e03f:8280:eca0:1c55:2817:f855", 13579);
             //printSessionInfo(socket);
             outOis = new ObjectOutputStream(socket.getOutputStream());
             inOis = new ObjectInputStream(socket.getInputStream());
