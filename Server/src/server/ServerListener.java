@@ -38,7 +38,7 @@ public class ServerListener implements Runnable{
 
     void stop() {
         try {
-            serverSocket.close();
+            if (serverSocket!= null) serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

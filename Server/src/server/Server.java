@@ -157,6 +157,7 @@ public class Server {
         System.out.println("Enter restart to restart");
         System.out.println("Enter status to see status");
         System.out.println("Enter port to change port number");
+        System.out.println("Enter listLoggedUsers to see logged users");
         System.out.println("Enter quit to quit");
     }
 
