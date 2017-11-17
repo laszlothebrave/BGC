@@ -7,7 +7,7 @@ import message.UserName;
 import server.*;
 import java.io.Serializable;
 
-public class MsgPassword implements Serializable, Message {
+public class MsgPassword extends Message implements Serializable {
     private String password;
     private UserName userName;
 

@@ -2,7 +2,7 @@ package message;
 
 import java.io.Serializable;
 
-public class MsgAnnouncement implements  Serializable, Message {
+public class MsgAnnouncement extends Message implements  Serializable {
     private String info;
 
     public MsgAnnouncement() {}

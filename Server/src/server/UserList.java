@@ -3,7 +3,7 @@ package server;
 import message.*;
 import java.util.*;
 
-class UserList {
+public class UserList {
     private HashMap<UserName, User> usersList;
     private int userCounter;
     private int maxUsers;
@@ -41,11 +41,17 @@ class UserList {
         return maxUsers;
     }
 
-    synchronized void add(UserName userName, User user) {
+    public synchronized void add(UserName userName, User user) {
         usersList.put(userName, user);
     }
 
-    synchronized void remove (UserName userName) {
+    public synchronized void remove (UserName userName) {
         usersList.remove(userName);
+    }
+
+    public void print(){
+        for(Map.Entry<UserName, User> entry : usersList.entrySet()) {
+            System.out.println(entry.getKey());
+        }
     }
 }

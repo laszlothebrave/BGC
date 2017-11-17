@@ -10,6 +10,11 @@ import email.SMTPServer;
 import message.*;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Server {
@@ -68,6 +73,9 @@ public class Server {
                     case "port":
                         port();
                         break;
+                    case "listLoggedUsers":
+                        listLoggedUsers();
+                        break;
                     case "quit":
                         break;
                     default:
@@ -79,6 +87,10 @@ public class Server {
                 break;
             }
         } while (!command.equals("quit"));
+    }
+
+    private static void listLoggedUsers() {
+        userList.print();
     }
 
     private static void start() {
@@ -112,7 +124,7 @@ public class Server {
     }
 
     private static void status() {
-            if (isRunning) {
+        if (isRunning) {
                 System.out.println("Listening on port:   " + port);
                 System.out.println("Users currently:   " + userList.getCurrentUser());
                 System.out.println("Users since last restart:    " + userList.getUserCounter());

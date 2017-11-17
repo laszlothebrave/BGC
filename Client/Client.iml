@@ -28,5 +28,20 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/src/org" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/src/org" />
+          <root url="file://$MODULE_DIR$/src/org" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/src/org" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/src/org" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="lwjgl" level="project" />
   </component>
 </module>

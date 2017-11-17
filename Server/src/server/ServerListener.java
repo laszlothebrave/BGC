@@ -10,9 +10,9 @@ public class ServerListener implements Runnable{
     private static ServerSocket serverSocket;
 
     public void run() {
-        System.setProperty("javax.net.ssl.keyStore", "C:/Users/Zin/Desktop/pro/java/BGC/lib/server.keystore");
+        System.setProperty("javax.net.ssl.keyStore", "lib/server.keystore");
         System.setProperty("javax.net.ssl.keyStorePassword", "password");
-        System.setProperty("javax.net.ssl.trustStore", "C:/Users/Zin/Desktop/pro/java/BGC/lib/truststore3");
+        System.setProperty("javax.net.ssl.trustStore", "lib/truststore3");
         System.setProperty("javax.net.ssl.trustStorePassword", "password");
 
         System.out.println("ServerListener started");

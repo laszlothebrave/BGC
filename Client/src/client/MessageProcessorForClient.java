@@ -1,4 +1,4 @@
-package Client;
+package client;
 
 import message.*;
 
@@ -10,9 +10,9 @@ public class MessageProcessorForClient implements Runnable{
     }
 
     public void run() {
-        while (Client.isRunning){
+        while (client.isRunning){
             try {
-                Message message = (Message) Client.linkedBlockingQueue.take();
+                Message message = (Message) client.linkedBlockingQueue.take();
                 numberOfMessages++;
                 message.execute();
             } catch (InterruptedException e) {
@@ -23,12 +23,12 @@ public class MessageProcessorForClient implements Runnable{
 
     void stop() {
         try {
-            Client.linkedBlockingQueue.put(new MsgAnnouncement("Message Processor stoped correctly"));
+            client.linkedBlockingQueue.put(new MsgAnnouncement("Message Processor stoped correctly"));
             Thread.sleep(500);
         } catch (InterruptedException e) {
             System.out.println("Message processor crashed. Check for Error.");
         }
-        Client.linkedBlockingQueue.clear();
+        client.linkedBlockingQueue.clear();
     }
 
 }

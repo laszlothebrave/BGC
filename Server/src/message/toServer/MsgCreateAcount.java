@@ -7,7 +7,7 @@ import server.Server;
 
 import java.io.Serializable;
 
-public class MsgCreateAcount implements Message, Serializable {
+public class MsgCreateAcount extends Message implements Serializable {
 
     private String login;
     private String passwordHash;

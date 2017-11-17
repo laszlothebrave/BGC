@@ -5,7 +5,7 @@ import game.Game;
 import server.*;
 import java.io.Serializable;
 
-public class MsgPrivateMessage implements Message, Serializable {
+public class MsgPrivateMessage extends Message implements Serializable {
     private UserName userName;
     private String message;
 

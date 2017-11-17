@@ -34,7 +34,7 @@ public class User implements Runnable{
     }
 
     private void listen() throws IOException, ClassNotFoundException, InterruptedException{
-        while (true) linkedBlockingQueue.put(inOis.readObject());
+        while (true) linkedBlockingQueue.put(((Message) inOis.readObject()).sign(this));
     }
 
     void send(Message message) throws IOException {
@@ -59,5 +59,13 @@ public class User implements Runnable{
             e.printStackTrace();
         }
         Server.userList.remove(userName);
+    }
+
+    public void setUserName(UserName userName) {
+        this.userName = userName;
+    }
+
+    public UserName getUserName() {
+        return userName;
     }
 }

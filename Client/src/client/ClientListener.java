@@ -1,4 +1,4 @@
-package Client;
+package client;
 
 import message.*;
 import javax.net.SocketFactory;
@@ -23,7 +23,7 @@ public class ClientListener implements Runnable{
             outOis = new ObjectOutputStream(socket.getOutputStream());
             inOis = new ObjectInputStream(socket.getInputStream());
             System.out.println("Connection established");
-            while (Client.isRunning) Client.linkedBlockingQueue.put(inOis.readObject());
+            while (client.isRunning) client.linkedBlockingQueue.put(inOis.readObject());
         } catch (InterruptedException | IOException | ClassNotFoundException e) {
             System.out.println("Socket closed");
         }
@@ -41,7 +41,7 @@ public class ClientListener implements Runnable{
         try {
             outOis.writeObject(message);
         } catch (IOException e) {
-            System.out.println("Client can't send message");
+            System.out.println("client can't send message");
         }
     }
 

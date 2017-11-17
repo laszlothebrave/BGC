@@ -1,4 +1,4 @@
-package Client;
+package client;
 
 import message.*;
 import message.toServer.MsgCreateAcount;
@@ -36,7 +36,7 @@ public class Client{
     }
 
     private static void console() {
-        System.out.println("Client started");
+        System.out.println("client started");
         System.out.println("Enter help for help");
         do {
             try {
@@ -111,10 +111,10 @@ public class Client{
 
     private static void status() {
             if (isRunning) {
-                System.out.println("Client is running");
+                System.out.println("client is running");
                 System.out.println("Port:   " + port);
                 System.out.println("Number of messages since last restart:   " + messageProcessorForClient.numberOfMessages);
-            } else System.out.println("Client is not running");
+            } else System.out.println("client is not running");
     }
 
     private static void help() {
