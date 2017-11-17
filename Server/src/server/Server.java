@@ -6,6 +6,7 @@ import database.PasswordHash;
 import database.UserExceptions.CreateUserExcaptions.EmailAdressOccupiedException;
 import database.UserExceptions.CreateUserExcaptions.InvalidEmailAdressException;
 import database.UserExceptions.CreateUserExcaptions.UserExistException;
+import email.ConfirmationEmail;
 import email.SMTPServer;
 import message.*;
 

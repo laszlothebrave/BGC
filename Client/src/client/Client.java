@@ -2,9 +2,8 @@ package client;
 
 import message.*;
 import message.toServer.MsgCreateAcount;
-import message.toServer.MsgDataRequest;
 import message.toServer.MsgLogin;
-import message.toServer.MsgPassword;
+import message.toServer.MsgVerification;
 
 import java.io.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -78,6 +77,8 @@ public class Client{
                     case "info":
                         info();
                         break;
+                    case "verify":
+                        verify();
                     default:
                         System.out.println("Unknow command");
                         break;
@@ -161,6 +162,15 @@ public class Client{
             System.out.println("Enter message:   ");
             String message = keyboardIn.readLine();
             clientListener.send(new MsgPrivateMessage(userName, message));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void verify(){
+        try {
+            System.out.println("Enter verification key:");
+            clientListener.send(new MsgVerification(keyboardIn.readLine()));
         } catch (IOException e) {
             e.printStackTrace();
         }

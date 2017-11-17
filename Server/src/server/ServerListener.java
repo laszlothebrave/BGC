@@ -24,7 +24,6 @@ public class ServerListener implements Runnable{
             while (Server.isRunning) {
                 try {
                     clientSocket = serverSocket.accept();
-
                     new Thread(new User(clientSocket, Server.linkedBlockingQueue)).start();
                 } catch (IOException e) {
                     System.out.println("ServerSocket closed");

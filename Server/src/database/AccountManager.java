@@ -18,8 +18,8 @@ public class AccountManager {
             else if (emailOccupied(email)) throw new EmailAdressOccupiedException();
             else {
                 String confirmationKey = DatatypeConverter.printHexBinary(RandomUtils.nextBytes(2));
-                Mysql.executeUpdate("INSERT INTO users (login,password,email,confirmationKey) VALUES ('" + login + "','" + passwordHash + "','" + email + "','"+confirmationKey+"')");
-                ConfirmationEmail confirmationEmail = new ConfirmationEmail(null,confirmationKey,email);
+                Mysql.executeUpdate("INSERT INTO users (login,password,email,confirmationKey) VALUES ('" + login + "','" + passwordHash + "','" + email + "','" + confirmationKey + "')");
+                ConfirmationEmail confirmationEmail = new ConfirmationEmail(null, confirmationKey, email);
                 SMTPServer.send(confirmationEmail);
             }
         } catch (SQLException e) {
@@ -27,11 +27,11 @@ public class AccountManager {
         }
     }
 
-    public void confirmEmail(String login,String confirmationKey) throws InvalidConfirmationKeyException {
+    public void confirmEmail(String login, String confirmationKey) throws InvalidConfirmationKeyException {
         try {
-            if(Mysql.executeQuery("SELECT * FROM users WHERE login='" + login + "' AND confirmationKey='" + confirmationKey + "'").isBeforeFirst()) {
-                Mysql.executeUpdate("UPDATE users SET confirmed=1 WHERE login='"+login+"'");
-            }else{
+            if (Mysql.executeQuery("SELECT * FROM users WHERE login='" + login + "' AND confirmationKey='" + confirmationKey + "'").isBeforeFirst()) {
+                Mysql.executeUpdate("UPDATE users SET confirmed=1 WHERE login='" + login + "'");
+            } else {
                 throw new InvalidConfirmationKeyException();
             }
         } catch (SQLException e) {
