@@ -23,7 +23,7 @@ public class ClientListener implements Runnable{
             outOis = new ObjectOutputStream(socket.getOutputStream());
             inOis = new ObjectInputStream(socket.getInputStream());
             System.out.println("Connection established");
-            while (client.isRunning) client.linkedBlockingQueue.put(inOis.readObject());
+            while (Client.isRunning) Client.linkedBlockingQueue.put(inOis.readObject());
         } catch (InterruptedException | IOException | ClassNotFoundException e) {
             System.out.println("Socket closed");
         }
